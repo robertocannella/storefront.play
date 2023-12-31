@@ -2,9 +2,12 @@
 <body>
 
 <ul>
-{% for item in items %}
+{% for product in products %}
     <li>
-       ID:  {{ item.id }}
+       {{ product.id }} |
+        {{ product.title }} |
+    {{ product.unit_price }}
+
     </li>
     {% empty %}
     No items found.

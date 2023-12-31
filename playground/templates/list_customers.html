@@ -1,0 +1,20 @@
+<html lang="en">
+<body>
+
+<ul>
+{% for customer in customers %}
+    <li>
+    
+    {{ customer.first_name }} |
+    {{ customer.last_name }} |
+    {{ customer.email }}
+
+    </li>
+    {% empty %}
+    No items found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>
