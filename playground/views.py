@@ -91,6 +91,14 @@ def get_all_collections_without_featured_product(request):
 
 
 # ORDERS
+def get_all_orders(request, recent=None):
+    if recent is None:
+        recent = 10
+
+    query_set = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').all().order_by('-placed_at')[:recent]
+    return render(request, 'list_orders.html', {'orders': query_set})
+
+
 def get_orders_by_customer_id(request, customer_id):
     query_set = Order.objects.filter(customer_id=customer_id)
     return render(request, 'list_orders.html', {'orders': list(query_set)})
