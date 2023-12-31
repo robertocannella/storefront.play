@@ -22,6 +22,15 @@ def get_all_customers(request):
 
 
 def get_all_product_by_id(request, id):
-
     query_set = Product.objects.filter(pk=id)
-    return render(request, 'product_show.html', {'name': 'Roberto', 'product' : query_set[0]})
+    return render(request, 'product_show.html', {'product' : query_set[0]})
+
+
+def get_products_by_price(request, unit_price):
+    query_set = Product.objects.filter(unit_price=unit_price)
+    return render(request, 'list_items.html', {'items': list(query_set)})
+
+
+def get_products_by_price_range(request, min_price, max_price):
+    products = Product.objects.filter(unit_price__gte=min_price, unit_price__lte=max_price)
+    return render(request, 'list_items.html', {'items' : list(products)})

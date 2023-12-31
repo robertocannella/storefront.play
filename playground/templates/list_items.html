@@ -1,0 +1,16 @@
+<html lang="en">
+<body>
+
+<ul>
+{% for item in items %}
+    <li>
+       ID:  {{ item.id }}
+    </li>
+    {% empty %}
+    No items found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>
