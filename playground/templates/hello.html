@@ -12,7 +12,13 @@
         {%  endfor %}
         </ul>
     {% endif %}
-    
+    {% if customers %}
+        <ul>
+        {% for customer in customers %}
+            <li>{{ customer.first_name }} {{ customer.last_name }}</li>
+        {%  endfor %}
+        </ul>
+    {% endif %}
 
   </body>
 </html>
