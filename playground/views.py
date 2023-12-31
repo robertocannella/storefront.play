@@ -11,6 +11,8 @@ def say_hello(request, name=None):
     return render(request, 'hello.html', {'name': name})
 
 
+# PRODUCTS
+
 def get_all_products(request):
     query_set = Product.objects.all()
     return render(request, 'hello.html', {'name': 'Roberto', 'products': list(query_set)})
@@ -42,6 +44,17 @@ def get_all_customers(request):
     return render(request, 'list_customers.html', {'customers': list(query_set)})
 
 
-def search_customer_by_email(request,email_query):
+def search_customer_by_email(request, email_query):
     query_set = Customer.objects.filter(email__icontains=email_query)
     return render(request, 'list_customers.html', {'customers': list(query_set)})
+
+
+# COLLECTIONS
+def get_all_collections(request):
+    query_set = Collection.objects.all()
+    return render(request, 'list_collections.html', {'collections': list(query_set)})
+
+
+def get_all_collections_without_featured_product(request):
+    query_set = Collection.objects.filter(featured_product__isnull=True)
+    return render(request, 'list_collections.html', {'collections': list(query_set)})

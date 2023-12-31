@@ -1,0 +1,19 @@
+<html lang="en">
+<body>
+
+<ul>
+{% for collection in collections %}
+    <li>
+    
+    {{ collection.title }} |
+    {{ collection.featured_product_id }} |
+
+    </li>
+    {% empty %}
+    No items found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>

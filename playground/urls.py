@@ -13,6 +13,8 @@ urlpatterns = [
     path('products/title_search/<str:query>/', views.search_product_title),
     path('customers/', views.get_all_customers),
     path('customers/email_search/<str:email_query>/', views.search_customer_by_email),
+    path('collections/', views.get_all_collections),
+    path('collections_without_featured_product/', views.get_all_collections_without_featured_product),
 
 ]
 
