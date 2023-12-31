@@ -1,9 +1,18 @@
-<html>
+<html lang="en">
   <body>
     {% if name %}
-    <h1>Hello {{ name }}</h1>
-    {% else %}
-    <h1>Hello World</h1>
+        <h1>Hello {{ name }}</h1>
+        {% else %}
+        <h1>Hello World</h1>
     {% endif %}
+    {% if products %}
+        <ul>
+        {% for product in products %}
+            <li>{{ product.title }}</li>
+        {%  endfor %}
+        </ul>
+    {% endif %}
+    
+
   </body>
 </html>
