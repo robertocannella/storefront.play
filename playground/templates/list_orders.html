@@ -1,0 +1,18 @@
+<html lang="en">
+<body>
+
+<ul>
+{% for order in orders %}
+    <li>
+    
+    {{ order.placed_at }} 
+
+    </li>
+    {% empty %}
+    No items found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>
