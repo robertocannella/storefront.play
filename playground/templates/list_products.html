@@ -1,12 +1,13 @@
 <html lang="en">
 <body>
-
 <ul>
 {% for product in products %}
     <li>
-       {{ product.id }} |
+
+        {{ product.collection__title }} |
+        {{ product.id }} |
         {{ product.title }} |
-    {{ product.unit_price }}
+        {{ product.unit_price }}
 
     </li>
     {% empty %}

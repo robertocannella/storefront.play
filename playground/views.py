@@ -29,7 +29,13 @@ def get_all_products(request):
     # Take the next 5 elements
     query_set = Product.objects.order_by('unit_price', '-title').reverse()[5:10]
 
-    return render(request, 'list_products.html', { 'products': list(query_set)})
+    # Get only certain values from the database
+    query_set = Product.objects.values('id', 'unit_price', 'title')
+
+    # Get related table properties
+    query_set = Product.objects.values('id', 'unit_price', 'title', 'collection__title')
+
+    return render(request, 'list_products.html', {'products': list(query_set)})
 
 
 def get_all_product_by_id(request, id):
@@ -45,6 +51,16 @@ def get_products_by_price(request, unit_price):
 def get_products_by_price_range(request, min_price, max_price):
     products = Product.objects.filter(unit_price__range=(min_price, max_price))
     return render(request, 'list_products.html', {'products': list(products)})
+
+
+def get_ordered_products(request):
+    # Get IDs of distinct products that have been ordered
+    distinct_product_ids = OrderItem.objects.values_list('product_id').distinct()
+
+    # Get products with those IDs, ordered by title
+    products = Product.objects.filter(id__in=distinct_product_ids).order_by('title')
+
+    return render(request, 'list_products.html', {'products': products})
 
 
 def search_product_title(request, query):
@@ -84,4 +100,3 @@ def get_orders_by_customer_id(request, customer_id):
 def get_order_items_by_collection_id(request, collection_id):
     query_set = OrderItem.objects.filter(product_id__collection_id=collection_id)
     return render(request, 'list_order_items.html', {'orderItems': list(query_set)})
-
