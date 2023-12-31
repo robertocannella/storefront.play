@@ -14,8 +14,22 @@ def say_hello(request, name=None):
 # PRODUCTS
 
 def get_all_products(request):
+    # Get all products
     query_set = Product.objects.all()
-    return render(request, 'hello.html', {'name': 'Roberto', 'products': list(query_set)})
+
+    # Get all products, sort by unit price (ASC) then by title (DESC),
+    query_set = Product.objects.order_by('unit_price', '-title')
+
+    # Reverse the order
+    query_set = Product.objects.order_by('unit_price', '-title').reverse()
+
+    # Take first 5 elements
+    query_set = Product.objects.order_by('unit_price', '-title').reverse()[:5]
+
+    # Take the next 5 elements
+    query_set = Product.objects.order_by('unit_price', '-title').reverse()[5:10]
+
+    return render(request, 'list_products.html', { 'products': list(query_set)})
 
 
 def get_all_product_by_id(request, id):
@@ -66,6 +80,7 @@ def get_orders_by_customer_id(request, customer_id):
     return render(request, 'list_orders.html', {'orders': list(query_set)})
 
 
+# ORDER ITEMS
 def get_order_items_by_collection_id(request, collection_id):
     query_set = OrderItem.objects.filter(product_id__collection_id=collection_id)
     return render(request, 'list_order_items.html', {'orderItems': list(query_set)})
