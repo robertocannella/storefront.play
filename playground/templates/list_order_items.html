@@ -1,0 +1,18 @@
+<html lang="en">
+<body>
+
+<ul>
+{% for item in orderItems %}
+    <li>
+    
+    {{ item.unit_price }} 
+
+    </li>
+    {% empty %}
+    No items found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>

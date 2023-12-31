@@ -64,3 +64,9 @@ def get_all_collections_without_featured_product(request):
 def get_orders_by_customer_id(request, customer_id):
     query_set = Order.objects.filter(customer_id=customer_id)
     return render(request, 'list_orders.html', {'orders': list(query_set)})
+
+
+def get_order_items_by_collection_id(request, collection_id):
+    query_set = OrderItem.objects.filter(product_id__collection_id=collection_id)
+    return render(request, 'list_order_items.html', {'orderItems': list(query_set)})
+
