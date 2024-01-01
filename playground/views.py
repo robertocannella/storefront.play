@@ -13,7 +13,24 @@ from tags.models import TaggedItem
 
 
 def say_hello(request, name=None):
-    return render(request, 'hello.html', {'name': name})
+    # Create a collection
+    collection = Collection()
+    collection.title = "Test Collection"
+    collection.featured_product = None
+    collection.save()
+    collection_id_to_delete = collection.id
+
+    # Update a collection
+    collection = Collection.objects.get(pk=11)
+    collection.title = 'Games'
+    collection.featured_product = Product(pk=4)
+    collection.save()
+
+    # Delete a collection
+    delete_collection = Collection(collection_id_to_delete)
+    delete_collection.delete()
+
+    return render(request, 'hello.html', {'name': name, 'collection': collection})
 
 
 # PRODUCTS
