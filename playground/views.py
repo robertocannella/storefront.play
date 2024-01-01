@@ -5,6 +5,7 @@ from store.models import Collection
 from store.models import Customer
 from store.models import Order
 from store.models import OrderItem
+from django.db.models import Sum, Avg, Max, Min, Count
 
 
 def say_hello(request, name=None):
@@ -38,6 +39,11 @@ def get_all_products(request):
     return render(request, 'list_products.html', {'products': list(query_set)})
 
 
+def count_products(request):
+    results = Product.objects.aggregate(count=Count('id'))
+    return render(request, 'aggregates/count.html', {'results': results})
+
+
 def get_all_product_by_id(request, id):
     query_set = Product.objects.filter(pk=id)
     return render(request, 'product_show.html', {'product': query_set[0]})
@@ -49,7 +55,7 @@ def get_products_by_price(request, unit_price):
 
 
 def get_products_by_price_range(request, min_price, max_price):
-    products = Product.objects.filter(unit_price__range=(min_price, max_price))
+    products = Product.objects.filter(unit_price__range=(min_price, max_price)).order_by('unit_price')
     return render(request, 'list_products.html', {'products': list(products)})
 
 
@@ -90,12 +96,28 @@ def get_all_collections_without_featured_product(request):
     return render(request, 'list_collections.html', {'collections': list(query_set)})
 
 
+def get_collection_by_id(request, collection_id):
+    collection = Collection.objects.get(id=collection_id)
+    results = Product.objects.filter(collection_id=collection_id).aggregate(
+            max=Max('unit_price'),
+            min=Min('unit_price'),
+            avg=Avg('unit_price')
+    )
+    return render(request, 'collection_show.html', {'collection': collection, 'results': results})
 # ORDERS
+
+
+def count_orders(request):
+    results = Order.objects.aggregate(count=Count('id'))
+    return render(request, 'aggregates/count.html', {'results': results})
+
+
 def get_all_orders(request, recent=None):
     if recent is None:
         recent = 10
 
-    query_set = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').all().order_by('-placed_at')[:recent]
+    query_set = Order.objects.select_related('customer').prefetch_related('orderitem_set__product').all().order_by(
+        '-placed_at')[:recent]
     return render(request, 'list_orders.html', {'orders': query_set})
 
 
@@ -108,3 +130,14 @@ def get_orders_by_customer_id(request, customer_id):
 def get_order_items_by_collection_id(request, collection_id):
     query_set = OrderItem.objects.filter(product_id__collection_id=collection_id)
     return render(request, 'list_order_items.html', {'orderItems': list(query_set)})
+
+
+def get_total_ordered_products(request, product_id):
+    results = OrderItem.objects.filter(product_id=product_id).aggregate(count=Sum('quantity'))
+    return render(request, 'aggregates/count.html', {'results': results})
+
+
+def count_customer_orders(request, customer_id):
+    results = Order.objects.filter(customer_id=customer_id).aggregate(count=Count('id'))
+    return render(request, 'aggregates/count.html', {'results': results})
+
