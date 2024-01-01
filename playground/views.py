@@ -1,7 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.db.models.functions import Concat
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from store.models import Product
 from store.models import Collection
 from store.models import Customer
@@ -171,6 +172,28 @@ def get_all_orders(request, recent=None):
     return render(request, 'list_orders.html', {'orders': query_set})
 
 
+def get_order_by_id(request, order_id):
+    try:
+        order = Order.objects.get(pk=order_id)
+    except Order.DoesNotExist:
+
+        with transaction.atomic():
+
+            # Create A new order
+            order = Order()
+            order.customer_id = 29
+            order.save()
+
+            order_item = OrderItem()
+            order_item.order = order
+            order_item.product_id = 50
+            order_item.quantity = 2
+            order_item.unit_price = 10.99
+            order_item.save()
+
+    return render(request, 'order_show.html', {'order': order})
+
+
 def get_orders_by_customer_id(request, customer_id):
     query_set = Order.objects.filter(customer_id=customer_id)
     return render(request, 'list_orders.html', {'orders': list(query_set)})
@@ -187,6 +210,7 @@ def report_customer_orders(request):
     return render(request, 'reports/customers_orders.html', {'customers': list(query_set)})
 
 
+# REPORTS
 def report_customer_with_min_orders(request, minimum_orders=1):
     query_set = Customer.objects.annotate(Count('order')).filter(order__count__gte=minimum_orders)
     return render(request, 'reports/customers_with_min_orders.html', {'customers': list(query_set)})
@@ -213,3 +237,4 @@ def get_tagged_products(request, product_id):
     query_set = TaggedItem.objects.get_tags_for(Product, product_id)
 
     return render(request, 'list_product_tags.html', {'tagged_item': list(query_set)})
+
