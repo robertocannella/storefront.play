@@ -17,3 +17,4 @@ export MYSQLCLIENT_LDFLAGS=$(pkg-config --libs mysqlclient)
 export MYSQLCLIENT_CFLAGS=$(pkg-config --cflags mysqlclient)
 pip install mysqlclient
 ```
+
