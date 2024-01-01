@@ -9,6 +9,7 @@ urlpatterns = [
     path('products/', views.get_all_products),
     path('products/count/', views.count_products),
     path('products/top/<int:num>/', views.get_top_products),
+    path('tags/<int:product_id>/', views.get_tagged_products),
     path('products/<str:id>/',views.get_all_product_by_id),
     path('products/price/<int:unit_price>/', views.get_products_by_price),
     path('products/price/<int:min_price>/<int:max_price>/', views.get_products_by_price_range),

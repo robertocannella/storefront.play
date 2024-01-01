@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db.models.functions import Concat
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -7,6 +8,8 @@ from store.models import Customer
 from store.models import Order
 from store.models import OrderItem
 from django.db.models import Sum, Avg, Max, Min, Count, Func, F, Value, ExpressionWrapper, DecimalField
+
+from tags.models import TaggedItem
 
 
 def say_hello(request, name=None):
@@ -186,3 +189,10 @@ def get_total_ordered_products(request, product_id):
 def count_customer_orders(request, customer_id):
     results = Order.objects.filter(customer_id=customer_id).aggregate(count=Count('id'))
     return render(request, 'aggregates/count.html', {'results': results})
+
+
+# TAGGED ITEMS
+def get_tagged_products(request, product_id):
+    query_set = TaggedItem.objects.get_tags_for(Product, product_id)
+
+    return render(request, 'list_product_tags.html', {'tagged_item': list(query_set)})

@@ -1,0 +1,16 @@
+<html lang="en">
+<body>
+<ul>
+{{ tags }}
+{% for item in tagged_item %}
+    <li>
+        {{ item.tag.label }}
+    </li>
+    {% empty %}
+    No Tags found.
+{% endfor %}
+</ul>
+
+</body>
+
+</html>
