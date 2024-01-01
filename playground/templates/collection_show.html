@@ -3,9 +3,11 @@
 
 
 <h1>{{ collection.title }}</h1>
-    <p>Max Price: ${{ results.max }}</p>
-    <p>Min Price: ${{ results.min }}</p>
-    <p>Average: ${{ results.avg }}</p>
+
+    <p>Max Price: ${{ results.max|floatformat:2 }}</p>
+    <p>Min Price: ${{ results.min|floatformat:2 }}</p>
+    <p>Average: ${{ results.avg|floatformat:2 }}</p>
+    <p>Count {{ collection.products_count }}</p>
 </body>
 
 </html>

@@ -8,7 +8,8 @@
         {{ product.id }} |
         {{ product.title }} |
         {{ product.unit_price }} |
-        {{ product.discounted_price|floatformat:2 }}
+        {{ product.total_cost }}
+    
     </li>
     {% empty %}
     No items found.

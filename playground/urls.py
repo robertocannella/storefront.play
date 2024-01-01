@@ -8,6 +8,7 @@ urlpatterns = [
     path('hello/<str:name>/', views.say_hello),
     path('products/', views.get_all_products),
     path('products/count/', views.count_products),
+    path('products/top/<int:num>/', views.get_top_products),
     path('products/<str:id>/',views.get_all_product_by_id),
     path('products/price/<int:unit_price>/', views.get_products_by_price),
     path('products/price/<int:min_price>/<int:max_price>/', views.get_products_by_price_range),
@@ -24,6 +25,8 @@ urlpatterns = [
     path('orders/<int:recent>', views.get_all_orders, name='recent_orders'),
     path('customer/<int:customer_id>/orders/', views.get_orders_by_customer_id),
     path('order_items_by_collection_id/<int:collection_id>', views.get_order_items_by_collection_id),
-    path('order_items/product/<int:product_id>', views.get_total_ordered_products, name='total_ordered_products')
+    path('order_items/product/<int:product_id>', views.get_total_ordered_products, name='total_ordered_products'),
+    path('reports/customers/orders',views.report_customer_orders, name='customers_orders'),
+    path('reports/customers/orders/min/<int:minimum_orders>',views.report_customer_with_min_orders, name='customers_with_min_orders')
 ]
 

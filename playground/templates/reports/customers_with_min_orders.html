@@ -1,0 +1,29 @@
+<html lang="en">
+<body>
+    <table border="1">
+    <thead>
+        Total orders by customer
+    </thead>
+    <tbody>
+        <tr>
+            <th>Customer</th>
+            <th>Total Orders</th>
+        </tr>
+
+    </tbody>
+    {% for customer in customers %}
+        <tr>
+        <td>{{ customer.first_name }}</td>
+        <td>{{ customer.order__count }}</td>
+        </tr>
+    {% empty %}
+        <li>No results</li>
+    {% endfor %}
+    </table>
+
+
+
+</body>
+
+
+</html>

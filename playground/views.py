@@ -6,7 +6,7 @@ from store.models import Collection
 from store.models import Customer
 from store.models import Order
 from store.models import OrderItem
-from django.db.models import Sum, Avg, Max, Min, Count, Func, F, Value
+from django.db.models import Sum, Avg, Max, Min, Count, Func, F, Value, ExpressionWrapper, DecimalField
 
 
 def say_hello(request, name=None):
@@ -35,7 +35,14 @@ def get_all_products(request):
     query_set = Product.objects.values('id', 'unit_price', 'title')
 
     # Get related table properties
-    query_set = Product.objects.values('id', 'unit_price', 'title', 'collection__title')
+    discounted_price = ExpressionWrapper(F('unit_price') * 0.80, output_field=DecimalField())
+    query_set = Product.objects.values(
+        'id',
+        'unit_price',
+        'title',
+        'collection__title').annotate(
+        discounted_price=discounted_price
+    )
 
     return render(request, 'list_products.html', {'products': list(query_set)})
 
@@ -75,6 +82,13 @@ def search_product_title(request, query):
     return render(request, 'list_products.html', {'products': list(products)})
 
 
+def get_top_products(request, num):
+    query_set = Product.objects.annotate(
+        total_cost=(F('orderitem__unit_price') * F('orderitem__quantity'))
+    ).order_by('-total_cost')[:num]
+    return render(request, 'reports/products_top.html', {'products': list(query_set)})
+
+
 # CUSTOMERS
 def get_all_customers(request):
     query_set = Customer.objects.all()
@@ -111,18 +125,18 @@ def get_all_collections_without_featured_product(request):
 
 
 def get_collection_by_id(request, collection_id):
-    collection = Collection.objects.get(id=collection_id)
+    collection = Collection.objects.filter(id=collection_id).annotate(
+        products_count=Count('product')
+    )
     results = Product.objects.filter(collection_id=collection_id).aggregate(
         max=Max('unit_price'),
         min=Min('unit_price'),
         avg=Avg('unit_price')
     )
-    return render(request, 'collection_show.html', {'collection': collection, 'results': results})
+    return render(request, 'collection_show.html', {'collection': list(collection)[0], 'results': results})
 
 
 # ORDERS
-
-
 def count_orders(request):
     results = Order.objects.aggregate(count=Count('id'))
     return render(request, 'aggregates/count.html', {'results': results})
@@ -140,6 +154,22 @@ def get_all_orders(request, recent=None):
 def get_orders_by_customer_id(request, customer_id):
     query_set = Order.objects.filter(customer_id=customer_id)
     return render(request, 'list_orders.html', {'orders': list(query_set)})
+
+
+def report_customer_orders(request):
+    query_set = Customer.objects.annotate(
+        Count('order'),
+        last_order_id=Max('order__id'),
+        total_spent=Sum(
+            F('order__orderitem__unit_price') * F('order__orderitem__quantity')
+        )
+    )
+    return render(request, 'reports/customers_orders.html', {'customers': list(query_set)})
+
+
+def report_customer_with_min_orders(request, minimum_orders=1):
+    query_set = Customer.objects.annotate(Count('order')).filter(order__count__gte=minimum_orders)
+    return render(request, 'reports/customers_with_min_orders.html', {'customers': list(query_set)})
 
 
 # ORDER ITEMS
