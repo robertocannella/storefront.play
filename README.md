@@ -1,4 +1,4 @@
-# References
+# References Djange 5
 * [query_sets](https://docs.djangoproject.com/en/5.0/ref/models/querysets/)
 * [database functions](https://docs.djangoproject.com/en/5.0/ref/models/database-functions/)
 
@@ -38,3 +38,7 @@ python manage.py createsuperuser
 ``` 
 python manage.py changepassword <user>
 ```
+
+# Customize Admin Site
+
+[admin options](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#modeladmin-options)
