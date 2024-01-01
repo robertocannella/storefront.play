@@ -13,6 +13,7 @@ urlpatterns = [
     path('products/price/<int:min_price>/<int:max_price>/', views.get_products_by_price_range),
     path('products/title_search/<str:query>/', views.search_product_title),
     path('customers/', views.get_all_customers),
+    path('customers/<int:customer_id>/',views.get_customer_by_customer_id),
     path('customers/email_search/<str:email_query>/', views.search_customer_by_email),
     path('collections/', views.get_all_collections),
     path('collections/<int:collection_id>/', views.get_collection_by_id),

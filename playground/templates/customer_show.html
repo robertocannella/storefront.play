@@ -1,0 +1,14 @@
+<html lang="en">
+<body>
+
+    {% for cust in customer %}
+        <p>ID: {{ cust.id }}</p>
+        <p>First Name: {{ cust.first_name }}</p>
+        <p>Last Name: {{ cust.last_name }}</p>
+        <p>Full Name: {{ cust.full_name }}</p>
+        <!-- Add other fields as needed -->
+    {% endfor %}
+
+</body>
+
+</html>
