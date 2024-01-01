@@ -18,3 +18,23 @@ export MYSQLCLIENT_CFLAGS=$(pkg-config --cflags mysqlclient)
 pip install mysqlclient
 ```
 
+# Running Server
+
+``` 
+pipenv shell
+python manage.py runserver
+```
+
+# Create admin user:
+
+
+``` 
+pipenv shell
+python manage.py createsuperuser
+```
+
+## Change password
+
+``` 
+python manage.py changepassword <user>
+```

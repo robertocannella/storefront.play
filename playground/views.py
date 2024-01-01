@@ -33,7 +33,6 @@ def say_hello(request, name=None):
 
     return render(request, 'hello.html', {'name': name, 'collection': collection})
 
-
 # PRODUCTS
 
 def get_all_products(request):
